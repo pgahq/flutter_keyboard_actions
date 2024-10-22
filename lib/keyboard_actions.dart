@@ -160,7 +160,7 @@ class KeyboardActionstate extends State<KeyboardActions>
     if (_keyParent.currentContext != null) {
       final widgetRenderBox =
           _keyParent.currentContext!.findRenderObject() as RenderBox;
-      final fullHeight = MediaQuery.of(context).size.height;
+      final fullHeight = MediaQuery.sizeOf(context).height;
       final widgetHeight = widgetRenderBox.size.height;
       final widgetTop = widgetRenderBox.localToGlobal(Offset.zero).dy;
       final widgetBottom = widgetTop + widgetHeight;
@@ -331,7 +331,7 @@ class KeyboardActionstate extends State<KeyboardActions>
           ? _currentAction!.footerBuilder!(context)
           : null;
 
-      final queryData = MediaQuery.of(context);
+      final viewInsets = MediaQuery.viewInsetsOf(context);
       return Stack(
         children: [
           if (widget.tapOutsideBehavior != TapOutsideBehavior.none ||
@@ -355,7 +355,7 @@ class KeyboardActionstate extends State<KeyboardActions>
           Positioned(
             left: 0,
             right: 0,
-            bottom: queryData.viewInsets.bottom,
+            bottom: viewInsets.bottom,
             child: Material(
               color: config!.keyboardBarColor ?? Colors.grey[200],
               elevation: config!.keyboardBarElevation ?? 20,
@@ -447,7 +447,7 @@ class KeyboardActionstate extends State<KeyboardActions>
     if (widget.isDialog) {
       final render =
           _keyParent.currentContext?.findRenderObject() as RenderBox?;
-      final fullHeight = MediaQuery.of(context).size.height;
+      final fullHeight = MediaQuery.sizeOf(context).height;
       final localHeight = render?.size.height ?? 0;
       _localMargin = (fullHeight - localHeight) / 2;
     }
@@ -513,7 +513,7 @@ class KeyboardActionstate extends State<KeyboardActions>
           _isShowing ? CrossFadeState.showFirst : CrossFadeState.showSecond,
       firstChild: Container(
         height: widget.barSize,
-        width: MediaQuery.of(context).size.width,
+        width: MediaQuery.sizeOf(context).width,
         decoration: BoxDecoration(
           border: Border(
             top: BorderSide(
