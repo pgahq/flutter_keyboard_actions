@@ -67,10 +67,6 @@ class KeyboardActions extends StatefulWidget {
   /// If you are using keyboard_actions inside a Dialog it must be true
   final bool isDialog;
 
-  /// Tap outside the keyboard will dismiss this
-  @Deprecated('Use tapOutsideBehavior instead.')
-  final bool tapOutsideToDismiss;
-
   /// Tap outside behavior
   final TapOutsideBehavior tapOutsideBehavior;
 
@@ -95,8 +91,6 @@ class KeyboardActions extends StatefulWidget {
       this.enable = true,
       this.autoScroll = true,
       this.isDialog = false,
-      @Deprecated('Use tapOutsideBehavior instead.')
-          this.tapOutsideToDismiss = false,
       this.tapOutsideBehavior = TapOutsideBehavior.none,
       required this.config,
       this.overscroll = 12.0,
@@ -294,7 +288,7 @@ class KeyboardActionstate extends State<KeyboardActions>
   @override
   void didChangeMetrics() {
     if (PlatformCheck.isAndroid) {
-      final value = WidgetsBinding.instance.window.viewInsets.bottom;
+      final value = View.of(context).viewInsets.bottom;
       bool keyboardIsOpen = value > 0;
       _onKeyboardChanged(keyboardIsOpen);
       isKeyboardOpen = keyboardIsOpen;
@@ -334,9 +328,7 @@ class KeyboardActionstate extends State<KeyboardActions>
       final viewInsets = MediaQuery.viewInsetsOf(context);
       return Stack(
         children: [
-          if (widget.tapOutsideBehavior != TapOutsideBehavior.none ||
-              // ignore: deprecated_member_use_from_same_package
-              widget.tapOutsideToDismiss)
+          if (widget.tapOutsideBehavior != TapOutsideBehavior.none)
             Positioned.fill(
               child: Listener(
                 onPointerDown: (event) {
@@ -417,9 +409,10 @@ class KeyboardActionstate extends State<KeyboardActions>
         ? _kBarSize
         : 0; // offset for the actions bar
 
-    final keyboardHeight = EdgeInsets.fromWindowPadding(
-            WidgetsBinding.instance.window.viewInsets,
-            WidgetsBinding.instance.window.devicePixelRatio)
+    final view = View.of(context);
+    final keyboardHeight = EdgeInsets.fromViewPadding(
+            view.viewInsets,
+            view.devicePixelRatio)
         .bottom;
 
     newOffset += keyboardHeight; // + offset for the system keyboard
