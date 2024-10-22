@@ -409,10 +409,7 @@ class KeyboardActionstate extends State<KeyboardActions>
         ? _kBarSize
         : 0; // offset for the actions bar
 
-    final view = View.of(context);
-    final keyboardHeight = EdgeInsets.fromViewPadding(
-            view.viewInsets,
-            view.devicePixelRatio)
+    final keyboardHeight = MediaQuery.viewInsetsOf(context)
         .bottom;
 
     newOffset += keyboardHeight; // + offset for the system keyboard
