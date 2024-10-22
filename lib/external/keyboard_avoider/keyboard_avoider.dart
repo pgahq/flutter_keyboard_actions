@@ -100,9 +100,8 @@ class _KeyboardAvoiderState extends State<KeyboardAvoider>
     );
 
     // Calculate top of keyboard
-    final mediaQuery = MediaQuery.of(context);
-    final screenSize = mediaQuery.size;
-    final screenInsets = mediaQuery.viewInsets;
+    final screenSize = MediaQuery.sizeOf(context);
+    final screenInsets = MediaQuery.viewInsetsOf(context);
     final keyboardTop = screenSize.height - screenInsets.bottom;
 
     // If widget is entirely covered by keyboard, do nothing
