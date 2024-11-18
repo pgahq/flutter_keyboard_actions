@@ -151,17 +151,26 @@ class KeyboardActionstate extends State<KeyboardActions>
   ///
   /// Used to correctly calculate the offset to "avoid" with BottomAreaAvoider.
   double get _distanceBelowWidget {
-    if (_keyParent.currentContext != null) {
-      final widgetRenderBox =
-          _keyParent.currentContext!.findRenderObject() as RenderBox;
+      final widgetRenderBox = _keyParent.currentContext?.findRenderObject() as RenderBox?;
+
+      if(widgetRenderBox == null) return 0;
+
+      final parentScaffold = Scaffold.maybeOf(context);
+      final hasParentScaffold = parentScaffold != null;
+
+      // Check if the parent Scaffold is configured to resize when keyboard appears
+      // If the Scaffold exists, but the user did not specify a value,
+      // default to true replicating what [Scaffold] does by default.
+      final isParentScaffoldResizingToAvoidBottomInset = hasParentScaffold
+          ? parentScaffold.widget.resizeToAvoidBottomInset ?? true
+          : false;
+
       final fullHeight = MediaQuery.sizeOf(context).height;
       final widgetHeight = widgetRenderBox.size.height;
       final widgetTop = widgetRenderBox.localToGlobal(Offset.zero).dy;
       final widgetBottom = widgetTop + widgetHeight;
-      final distanceBelowWidget = fullHeight - widgetBottom;
+      final distanceBelowWidget = isParentScaffoldResizingToAvoidBottomInset ? 0.0 : fullHeight - widgetBottom;
       return distanceBelowWidget;
-    }
-    return 0;
   }
 
   /// Set the config for the keyboard action bar.
